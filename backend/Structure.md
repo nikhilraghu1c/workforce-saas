@@ -1,19 +1,34 @@
-backend/
+Zenvork/
 ├── src/
 │   ├── config/
 │   │   ├── db.js
-│   │   └── env.js
-│   ├── models/
-│   │   ├── Organization.js
-│   │   └── User.js
-│   ├── routes/
-│   │   └── auth.routes.js
+│   │   ├── environment.js
+│   │   └── logger.js
 │   ├── controllers/
-│   │   └── auth.controller.js
+│   │   ├── auth.controller.js
+│   │   └── user.controller.js
 │   ├── middlewares/
-│   │   └── auth.middleware.js
+│   │   ├── auth.middleware.js
+│   │   ├── error.middleware.js
+│   │   └── rateLimiter.middleware.js
+│   ├── models/
+│   │   ├── user.model.js
+│   │   └── token.model.js
+│   ├── routes/
+│   │   ├── auth.routes.js
+│   │   └── user.routes.js
+│   ├── services/
+│   │   ├── auth.service.js
+│   │   └── user.service.js
+│   ├── utils/
+│   │   ├── apiResponse.js
+│   │   └── jwtHelper.js
 │   ├── app.js
-│   └── server.js
-├── .env
-├── .env.example
+│   ├── server.js
+├── tests/
+│   ├── auth.test.js
+│   └── user.test.js
+├── .gitignore
+└── .env
 ├── package.json
+└── README.md
