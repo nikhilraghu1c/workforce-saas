@@ -1,33 +1,80 @@
 import bcrypt from "bcrypt";
+import mongoose from "mongoose";
 import Organization from "../../models/organization.model.js";
 import User from "../../models/user.model.js";
+import { validateAdminFields } from "../../utils/validation.js";
 
 const registerAdmin = async (req, res) => {
+  // Start session for transaction
+  const session = await mongoose.startSession();
+
   try {
-    console.log("Register Admin Request Body:", req.body);
-    let { name, email, password, orgName } = req.body;
-    const hashedPassword  = await bcrypt.hash(password, 10);
+    // Extract and validate request body
+    const { name, email, password, orgName } = req.body;
 
-    const organization = await Organization.create({ name: orgName });
+    if (!validateAdminFields(req.body)) {
+      return res
+        .status(400)
+        .json({ message: "Invalid fields in request body" });
+    }
 
-    // or we can use organization.save() if we create an instance using new Organization()
-    // example : // const organization = new Organization({ name: orgName });
-    // await organization.save();
-    // same for User model below
+    // Check if organization or user already exists
+    const existingOrg = await Organization.findOne({ name: orgName });
 
-    const adminUser = {
-      name,
-      email,
-      password: hashedPassword,
-      role: "ADMIN",
-      organizationId: organization._id,
-    };
-    const savedUser = await User.create(adminUser);
-    res.status(200).json({ message: "Admin registered successfully", data: savedUser });
+    if (existingOrg) {
+      return res.status(400).json({ message: "Organization already exists" });
+    }
+
+    // Check if user with the same email already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res
+        .status(400)
+        .json({ message: "User with this email already exists" });
+    }
+
+    // start transaction
+    session.startTransaction();
+
+    // Hash password and create organization and admin user
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create Organization
+    const organization = await Organization.create([{ name: orgName }], {
+      session,
+    });
+
+    // Create Admin User
+    const adminUser = await User.create(
+      [
+        {
+          name,
+          email,
+          password: hashedPassword,
+          role: "ADMIN",
+          organizationId: organization[0]._id,
+        },
+      ],
+      { session }
+    );
+
+    await session.commitTransaction();
+    session.endSession();
+
+    // Respond with success
+    return res.status(201).json({
+      message: "Admin registered successfully",
+      data: adminUser[0],
+    });
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: error.message, message: "Failed to register admin" });
+    // Handle errors and rollback transaction
+    await session.abortTransaction();
+    session.endSession();
+
+    return res.status(500).json({
+      message: "Failed to register admin",
+      error: error.message,
+    });
   }
 };
 

@@ -1,44 +1,62 @@
 import mongoose from "mongoose";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 const userSchema = new mongoose.Schema(
-    {
-        organizationId : {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Organization",
-            required: true,
-        }, 
-        name: {
-            type: String,
-            required: true,
-            minlength: 3,
-            maxlength: 50,
-        },
-        email: {
-            type: String,
-            required: true,
-            unique: true,
-            maxlength: 100,
-        },
-        password: {
-            type: String,
-            required: true,
-            minlength: 6,
-        },
-        role: {
-            type: String,
-            enum: ["ADMIN", "EMPLOYEE"],
-            default: "EMPLOYEE",
-        },
-        designation: String,
-        skills: [String],
-        status: {
-            type: String,
-            enum: ["ACTIVE", "INACTIVE", "SUSPENDED"],
-            default: "ACTIVE",
-        },
-    }, {
-        timestamps: true,
-    }
+  {
+    organizationId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Organization",
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+      minlength: 3,
+      maxlength: 50,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      maxlength: 100,
+    },
+    password: {
+      type: String,
+      required: true,
+      minlength: 6,
+    },
+    role: {
+      type: String,
+      enum: ["ADMIN", "EMPLOYEE"],
+      default: "EMPLOYEE",
+    },
+    designation: String,
+    skills: [String],
+    status: {
+      type: String,
+      enum: ["ACTIVE", "INACTIVE", "SUSPENDED"],
+      default: "ACTIVE",
+    },
+  },
+  {
+    timestamps: true,
+  }
 );
+
+userSchema.methods.getJWT = async function () {
+  const user = this;
+  const token = await jwt.sign(
+    { _id: user._id, role: user.role, organizationId: user.organizationId },
+    process.env.ACCESS_TKN_SECRET,
+    { expiresIn: process.env.ACCESS_TKN_EXPIRE }
+  );
+  return token;
+};
+
+userSchema.methods.validatePassword = async function (passwordInputByUser) {
+  const user = this;
+  return await bcrypt.compare(passwordInputByUser, user.password);
+};
 
 export default mongoose.model("User", userSchema);
