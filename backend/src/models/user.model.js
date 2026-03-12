@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import { environment } from "../config/environment.js";
+
+const { ACCESS_TKN_SECRET, ACCESS_TKN_EXPIRE } = environment;
 
 const userSchema = new mongoose.Schema(
   {
@@ -48,8 +51,8 @@ userSchema.methods.getJWT = async function () {
   const user = this;
   const token = await jwt.sign(
     { _id: user._id, role: user.role, organizationId: user.organizationId },
-    process.env.ACCESS_TKN_SECRET,
-    { expiresIn: process.env.ACCESS_TKN_EXPIRE }
+    ACCESS_TKN_SECRET,
+    { expiresIn: ACCESS_TKN_EXPIRE }
   );
   return token;
 };

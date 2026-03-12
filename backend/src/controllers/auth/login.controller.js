@@ -1,5 +1,8 @@
 import { validateLoginData } from "../../utils/validation.js";
 import User from "../../models/user.model.js";
+import { environment } from "../../config/environment.js";
+
+const { ACCESS_TKN_EXPIRE } = environment;
 
 const login = async (req, res) => {
   try {
@@ -12,8 +15,8 @@ const login = async (req, res) => {
     const isPasswordValid = await user.validatePassword(password);
     if (isPasswordValid) {
       const token = await user.getJWT();
-      res.cookie("token", token, {
-        expires: new Date(Date.now() + 2 * process.env.ACCESS_TKN_EXPIRE),
+      res.cookie("accessToken", token, {
+        expires: new Date(Date.now() + 2 * ACCESS_TKN_EXPIRE),
       });
       res.send({
         message: "Login successful",
