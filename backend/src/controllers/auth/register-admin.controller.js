@@ -40,6 +40,9 @@ const registerAdmin = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create Organization
+    // or we can use organization.save() if we create an instance using new Organization()
+    // example : // const organization = new Organization({ name: orgName }); await organization.save();
+    // same for User model below
     const organization = await Organization.create([{ name: orgName }], {
       session,
     });

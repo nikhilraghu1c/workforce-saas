@@ -17,4 +17,23 @@ const validateLoginData = (req) => {
     }
   };
 
-export { validateAdminFields, validateLoginData };
+  const validateUserFields = (req) => {
+    const allowedUserFields = ['name', 'email', 'password', 'role', 'skills'];
+    const isUserFieldsValid = Object.keys(req.body).every((field) => {
+        return allowedUserFields.includes(field);
+    });
+    if (!isUserFieldsValid) {
+        throw new Error("Invalid fields in request body");
+    }
+    if(!validator.isEmail(req.body.email)) {
+        throw new Error("Email is invalid!!");
+    } else if (!req.body.password) {
+        throw new Error("Password is mandatory field");
+    } else if (!['ADMIN', 'EMPLOYEE'].includes(req.body.role)) {
+        throw new Error("Role must be either ADMIN or EMPLOYEE");
+    } else if (req.body.skills && !Array.isArray(req.body.skills)) {
+        throw new Error("Skills must be an array of strings");
+    }
+  }
+
+export { validateAdminFields, validateLoginData, validateUserFields };
