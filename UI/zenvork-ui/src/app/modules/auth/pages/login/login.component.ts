@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -15,8 +16,9 @@ export class LoginComponent implements OnInit {
   loading = false;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private authService: AuthService
+    private formBuilder: FormBuilder, 
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -37,13 +39,14 @@ export class LoginComponent implements OnInit {
     this.loading = true;
     this.authService.login(this.loginForm.value).subscribe({
       next: (res) => {
-        console.log("Login success", res);
+        this.router.navigate(['home']);
       },
       error: (err) => {
-        console.error("Login failed", err);
-      }
+        console.error('Login failed', err);
+      },
+      complete: () => {
+        this.loading = false;
+      },
     });
-    // TODO: Call authentication service here
-    // this.authService.login(this.loginForm.value).subscribe(...)
   }
 }
