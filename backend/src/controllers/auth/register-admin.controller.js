@@ -1,6 +1,5 @@
 import bcrypt from "bcrypt";
 import mongoose from "mongoose";
-import Organization from "../../models/organization.model.js";
 import User from "../../models/user.model.js";
 import { validateAdminFields } from "../../utils/validation.js";
 
@@ -10,19 +9,12 @@ const registerAdmin = async (req, res) => {
 
   try {
     // Extract and validate request body
-    const { name, email, password, orgName } = req.body;
+    const { name, email, password } = req.body;
 
     if (!validateAdminFields(req.body)) {
       return res
         .status(400)
         .json({ message: "Invalid fields in request body" });
-    }
-
-    // Check if organization or user already exists
-    const existingOrg = await Organization.findOne({ name: orgName });
-
-    if (existingOrg) {
-      return res.status(400).json({ message: "Organization already exists" });
     }
 
     // Check if user with the same email already exists
@@ -43,9 +35,9 @@ const registerAdmin = async (req, res) => {
     // or we can use organization.save() if we create an instance using new Organization()
     // example : // const organization = new Organization({ name: orgName }); await organization.save();
     // same for User model below
-    const organization = await Organization.create([{ name: orgName }], {
-      session,
-    });
+    // const organization = await Organization.create([{ name: orgName }], {
+    //   session,
+    // });
 
     // Create Admin User
     const adminUser = await User.create(
@@ -55,7 +47,6 @@ const registerAdmin = async (req, res) => {
           email,
           password: hashedPassword,
           role: "ADMIN",
-          organizationId: organization[0]._id,
         },
       ],
       { session }

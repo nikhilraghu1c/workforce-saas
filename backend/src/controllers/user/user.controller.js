@@ -4,7 +4,7 @@ import { validateUserFields } from "../../utils/validation.js";
 
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password, role, skills } = req.body;
+    const { name, email, password, role } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -18,8 +18,6 @@ const registerUser = async (req, res) => {
       email,
       password: hashedPassword,
       role,
-      skills: skills || [],
-      organizationId: req.user.organizationId,
     });
     await newUser.save();
     const { password: _, ...safeUser } = newUser.toObject();

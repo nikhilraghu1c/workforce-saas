@@ -7,11 +7,6 @@ const { ACCESS_TKN_SECRET, ACCESS_TKN_EXPIRE } = environment;
 
 const userSchema = new mongoose.Schema(
   {
-    organizationId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Organization",
-      required: true,
-    },
     name: {
       type: String,
       required: true,
@@ -31,16 +26,9 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["ADMIN", "EMPLOYEE"],
-      default: "EMPLOYEE",
-    },
-    designation: String,
-    skills: [String],
-    status: {
-      type: String,
-      enum: ["ACTIVE", "INACTIVE", "SUSPENDED"],
-      default: "ACTIVE",
-    },
+      enum: ["ADMIN", "USER"],
+      default: "USER",
+    }
   },
   {
     timestamps: true,
@@ -50,7 +38,7 @@ const userSchema = new mongoose.Schema(
 userSchema.methods.getJWT = async function () {
   const user = this;
   const token = await jwt.sign(
-    { _id: user._id, role: user.role, organizationId: user.organizationId },
+    { _id: user._id, role: user.role },
     ACCESS_TKN_SECRET,
     { expiresIn: ACCESS_TKN_EXPIRE }
   );

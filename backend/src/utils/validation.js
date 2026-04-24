@@ -1,7 +1,7 @@
 import validator from 'validator';
 
 const validateAdminFields = (params) => {
-    const allowedAdminFields = ['name', 'email', 'password', 'orgName'];
+    const allowedAdminFields = ['name', 'email', 'password'];
     const isAdminFieldsValid = Object.keys(params).every((field) => {
         return allowedAdminFields.includes(field);
     });
@@ -18,7 +18,7 @@ const validateLoginData = (req) => {
   };
 
   const validateUserFields = (req) => {
-    const allowedUserFields = ['name', 'email', 'password', 'role', 'skills'];
+    const allowedUserFields = ['name', 'email', 'password', 'role'];
     const isUserFieldsValid = Object.keys(req.body).every((field) => {
         return allowedUserFields.includes(field);
     });
@@ -29,7 +29,7 @@ const validateLoginData = (req) => {
         throw new Error("Email is invalid!!");
     } else if (!req.body.password) {
         throw new Error("Password is mandatory field");
-    } else if (!['ADMIN', 'EMPLOYEE'].includes(req.body.role)) {
+    } else if (!['ADMIN', 'USER'].includes(req.body.role)) {
         throw new Error("Role must be either ADMIN or EMPLOYEE");
     } else if (req.body.skills && !Array.isArray(req.body.skills)) {
         throw new Error("Skills must be an array of strings");
