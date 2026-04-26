@@ -1,0 +1,32 @@
+// PRIMARY
+$color-primary: #1976D2;
+$color-primary-dark: #0D47A1;
+
+// ACCENT
+$color-accent: #7C4DFF;
+
+// BACKGROUND
+$color-bg-main: #0A0F2C;
+$color-bg-surface: #121A3A;
+
+// TEXT
+$color-text-primary: #FFFFFF;
+$color-text-secondary: #B0BEC5;
+
+// EFFECTS
+$color-glass: rgba(255, 255, 255, 0.05);
+$color-border: rgba(255, 255, 255, 0.08);
+
+// GRADIENT TOKENS (VERY IMPORTANT)
+$gradient-primary: linear-gradient(
+  135deg,
+  $color-primary,
+  $color-accent
+);
+
+$gradient-glow: linear-gradient(
+  90deg,
+  transparent,
+  $color-accent,
+  transparent
+);

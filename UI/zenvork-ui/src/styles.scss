@@ -1,5 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 
 @use '@angular/material' as mat;
+@use './styles/variables' as *;
 
 @include mat.core();
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: $color-bg-main;
+  color: $color-text-primary;
+}
