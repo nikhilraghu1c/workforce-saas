@@ -1,0 +1,59 @@
+import mongoose from "mongoose";
+import validator from "validator";
+import bcrypt from "bcrypt";
+
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      minlength: [3, "Name must be at least 3 characters long"],
+      maxlength: [50, "Name cannot exceed 50 characters"],
+      trim: true,
+    },
+    businessId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Business",
+      required: true,
+      index: true
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      maxlength: 100,
+      trim: true,
+      lowercase: true,
+      validate: {
+        validator: (value) => validator.isEmail(value),
+        message: "Please provide a valid email address",
+      },
+    },
+    password: {
+      type: String,
+      required: true,
+      minlength: [8, "Password must be at least 8 characters long"],
+      maxlength: [128, "Password cannot exceed 128 characters"],
+      select: false,
+    },
+    role: {
+        type: String,
+        enum: ["OWNER", "STAFF"],
+        default: "STAFF",
+    }
+  },
+  {
+    timestamps: true,
+  },
+);
+
+// Pre-save hook to hash the password before saving the user document
+userSchema.pre("save", async function () {
+  // Only hash the password if it has been modified (or is new)
+  if (!this.isModified("password")) {
+    return;
+  }
+  this.password = await bcrypt.hash(this.password, 12);
+});
+
+export default mongoose.model("User", userSchema);
