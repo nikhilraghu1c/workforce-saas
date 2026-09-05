@@ -1,0 +1,50 @@
+:root {
+  // Brand
+  --azure: #0d47a1;
+  --azure-light: #1976d2;
+  --cyan: #00e5ff;
+  --purple: #7c4dff;
+
+  // Surfaces
+  --bg: #0a0e1a;
+  --surface: rgba(255, 255, 255, 0.04);
+  --surface-subtle: rgba(255, 255, 255, 0.03);
+  --surface-raised: rgba(255, 255, 255, 0.05);
+  --surface-nav: rgba(10, 14, 26, 0.72);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.25);
+
+  // Text
+  --text: #f5f6fa;
+  --text-dim: #9ca3c4;
+  --text-mute: #5d6485;
+  --text-on-brand: #fff;
+
+  // Status
+  --green: #22c97a;
+  --amber: #ffb020;
+
+  // State surfaces
+  --cyan-soft: rgba(0, 229, 255, 0.08);
+  --cyan-border: rgba(0, 229, 255, 0.25);
+  --green-soft: rgba(34, 201, 122, 0.1);
+  --green-border: rgba(34, 201, 122, 0.3);
+  --purple-soft: rgba(124, 77, 255, 0.12);
+  --purple-border: rgba(124, 77, 255, 0.25);
+  --purple-border-hover: rgba(124, 77, 255, 0.4);
+
+  // Reusable gradients
+  --gradient-brand: linear-gradient(135deg, var(--azure-light), var(--purple));
+  --gradient-hero-text: linear-gradient(135deg, var(--cyan), var(--purple));
+  --gradient-icon: linear-gradient(135deg, rgba(25, 118, 210, 0.25), rgba(124, 77, 255, 0.25));
+  --gradient-callout: linear-gradient(135deg, rgba(25, 118, 210, 0.12), var(--purple-soft));
+  --gradient-page-glow:
+    radial-gradient(ellipse 800px 500px at 15% -5%, rgba(124, 77, 255, 0.22), transparent 60%),
+    radial-gradient(ellipse 700px 500px at 90% 10%, rgba(0, 229, 255, 0.14), transparent 60%);
+
+  // Shared geometry
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 20px;
+}

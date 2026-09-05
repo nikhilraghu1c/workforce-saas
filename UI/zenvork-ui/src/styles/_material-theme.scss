@@ -1,0 +1,102 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+$app-primary-palette: (
+  50: #e3f2fd,
+  100: #bbdefb,
+  200: #90caf9,
+  300: #64b5f6,
+  400: #42a5f5,
+  500: #1976d2,
+  600: #1e88e5,
+  700: #1565c0,
+  800: #0d47a1,
+  900: #0b3c8c,
+  A100: #82b1ff,
+  A200: #448aff,
+  A400: #2979ff,
+  A700: #2962ff,
+  contrast: (
+    50: #000,
+    100: #000,
+    200: #000,
+    300: #000,
+    400: #000,
+    500: #fff,
+    600: #fff,
+    700: #fff,
+    800: #fff,
+    900: #fff,
+    A100: #000,
+    A200: #fff,
+    A400: #fff,
+    A700: #fff,
+  ),
+);
+
+$app-accent-palette: (
+  50: #ede7f6,
+  100: #d1c4e9,
+  200: #b39ddb,
+  300: #9575cd,
+  400: #7e57c2,
+  500: #7c4dff,
+  600: #6c3ce9,
+  700: #5e2fdb,
+  800: #4f24c7,
+  900: #3d1aae,
+  A100: #b388ff,
+  A200: #7c4dff,
+  A400: #651fff,
+  A700: #6200ea,
+  contrast: (
+    50: #000,
+    100: #000,
+    200: #000,
+    300: #000,
+    400: #fff,
+    500: #fff,
+    600: #fff,
+    700: #fff,
+    800: #fff,
+    900: #fff,
+    A100: #000,
+    A200: #fff,
+    A400: #fff,
+    A700: #fff,
+  ),
+);
+
+// Angular Material 21 exposes the established palette API under an `m2-` prefix.
+$app-primary-color: mat.m2-define-palette($app-primary-palette, 500);
+$app-accent-color: mat.m2-define-palette($app-accent-palette, 500);
+$app-warn-color: mat.m2-define-palette(mat.$m2-red-palette);
+
+$app-theme: mat.m2-define-dark-theme((
+  color: (
+    primary: $app-primary-color,
+    accent: $app-accent-color,
+    warn: $app-warn-color,
+  ),
+  typography: mat.m2-define-typography-config(
+    $font-family: 'Inter, sans-serif',
+  ),
+  density: 0,
+));
+
+@include mat.all-component-themes($app-theme);
+
+.mat-app-background {
+  background-color: var(--bg);
+}
+
+.btn-gradient {
+  border: 0;
+  background: var(--gradient-brand);
+  color: #fff;
+
+  &:hover {
+    filter: brightness(1.08);
+  }
+}
