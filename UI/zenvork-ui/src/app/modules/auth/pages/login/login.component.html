@@ -1,7 +1,7 @@
 <div class="login-container">
   <div class="login-box">
     <h1>Login</h1>
-    
+
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <!-- Email Field -->
       <div class="form-group">
@@ -13,11 +13,17 @@
           class="form-control"
           [class.is-invalid]="submitted && f['email'].errors"
           placeholder="Enter your email"
-        />
-        <div *ngIf="submitted && f['email'].errors" class="error-message">
-          <span *ngIf="f['email'].errors['required']">Email is required</span>
-          <span *ngIf="f['email'].errors['email']">Please enter a valid email</span>
-        </div>
+          />
+        @if (submitted && f['email'].errors) {
+          <div class="error-message">
+            @if (f['email'].errors['required']) {
+              <span>Email is required</span>
+            }
+            @if (f['email'].errors['email']) {
+              <span>Please enter a valid email</span>
+            }
+          </div>
+        }
       </div>
 
       <!-- Password Field -->
@@ -30,19 +36,25 @@
           class="form-control"
           [class.is-invalid]="submitted && f['password'].errors"
           placeholder="Enter your password"
-        />
-        <div *ngIf="submitted && f['password'].errors" class="error-message">
-          <span *ngIf="f['password'].errors['required']">Password is required</span>
-          <span *ngIf="f['password'].errors['minlength']">Password must be at least 6 characters</span>
-        </div>
+          />
+        @if (submitted && f['password'].errors) {
+          <div class="error-message">
+            @if (f['password'].errors['required']) {
+              <span>Password is required</span>
+            }
+            @if (f['password'].errors['minlength']) {
+              <span>Password must be at least 6 characters</span>
+            }
+          </div>
+        }
       </div>
 
       <!-- Submit Button -->
-      <button 
-        type="submit" 
+      <button
+        type="submit"
         class="btn-submit"
         [disabled]="loading"
-      >
+        >
         {{ loading ? 'Logging in...' : 'Login' }}
       </button>
     </form>
